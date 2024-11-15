@@ -41,10 +41,7 @@ class Item(BaseModel):
             'max_power': self.max_power,
             'torque': self.torque,
             'seats': self.seats}, index=[0])
-
-# obj = df_train.sample(1)
-# obj_dict = obj.to_dict('index')
-# obj_dict[obj.index[0]]
+        
 
 class Items(BaseModel):
     objects: List[Item]
@@ -58,4 +55,13 @@ def predict_item(item: Item) -> float:
 
 @app.post("/predict_items")
 def predict_items(items: List[Item]) -> List[float]:
-    return ...
+    res = items[0].to_DataFrame()
+    
+    for i, item in enumerate(items):
+        if i == 0:
+            continue
+        cur_item = item.to_DataFrame()
+        res = pd.concat([res, cur_item])
+    res =  res.reset_index(drop=True)
+    
+    return list(loaded_model.predict(res))

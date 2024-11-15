@@ -86,13 +86,8 @@ class NameTransformer(BaseEstimator, TransformerMixin):
         return X_copy
 
 def train_and_dump():
-    prep = Preprocessing()
-    
     X_train = df_train.drop('selling_price', axis=1)
-    X_test = df_test.drop('selling_price', axis=1)
-    
     y_train = df_train['selling_price']
-    y_test = df_test['selling_price']
     
     numeric=['year', 'km_driven', 'mileage', 'engine', 'max_power']
     categorical = ['fuel', 'seller_type', 'transmission', 'owner', 'popular_name', 'seats']
@@ -117,5 +112,4 @@ def train_and_dump():
     # with open('model.pkl', 'rb') as file:
     #     loaded_model = pickle.load(file)
 
-if __name__ == '__main__':
-    train_and_dump()
+train_and_dump()

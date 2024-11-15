@@ -12,28 +12,37 @@ df_train = pd.read_csv('https://raw.githubusercontent.com/Murcha1990/MLDS_ML_202
 df_test = pd.read_csv('https://raw.githubusercontent.com/Murcha1990/MLDS_ML_2022/main/Hometasks/HT1/cars_test.csv')
     
 class Preprocessing(BaseEstimator, TransformerMixin):
+    '''
+    Весь препроцессинг из AI_HW1_Regression_with_inference_base.ipynb
+    '''
     def __init__(self):
+        '''
+        Создание переменной для словаря медиан
+        '''
         self.seats_median = None
         self.median_dict = dict()
     
     @staticmethod
     def to_float(x):
-            try:
-                return float(x.split()[0])
-            except:
-                return None
+        '''
+        Статический метод, возвращающий число в
+        формате float или None
+        '''
+        try:
+            return float(x.split()[0])
+        except:
+            return None
             
     def fit(self, X, y=None):
+        '''
+        Получает значения для медиан. Удаляет
+        дубликаты для обучающей выборки
+        '''
         self.seats_median = X['seats'].median()
             
         for col_name in ['mileage', 'engine', 'max_power']:
             X[col_name] = X[col_name].apply(self.to_float)
             self.median_dict[col_name] = X[col_name].median()
-        
-        # drop_and_duplicated = X.drop('selling_price', axis=1).duplicated()
-        # no_target_dup = X[drop_and_duplicated]
-        # X = X.drop(no_target_dup.index).reset_index(drop=True)
-        # y = y.drop(no_target_dup.index).reset_index(drop=True)
         
         no_target_dup = X[X.duplicated()]
         X = X.drop(no_target_dup.index).reset_index(drop=True)
@@ -43,6 +52,12 @@ class Preprocessing(BaseEstimator, TransformerMixin):
     
     
     def transform(self, X):
+        '''
+        Преобразует признаки в нужный формат. 
+        Заполняет пропуски медианой. Удаляет 
+        ненужные признаки. Возвращает 
+        трансформированный датасет
+        '''
         X_copy = X.copy()
         
         X_copy['seats'] = X_copy['seats'].fillna(self.seats_median)
@@ -61,20 +76,39 @@ class Preprocessing(BaseEstimator, TransformerMixin):
 
 
 class NameTransformer(BaseEstimator, TransformerMixin):
+    '''
+    Заменяет признак name на признак popular_name
+    '''
     def __init__(self, min_count):
+        '''
+        Принимает минимальную частоту признака
+        min_count. Создает переменную для списка
+        категорий в popular_name
+        '''
         self.min_count = min_count
         self.popular_name_list = None
     
     def fit(self, X, y=None):
+        '''
+        Создает список категорий для popular_name
+        '''
         X_copy = X.copy()
         X_copy['name_count'] = X_copy.groupby(by='name').transform('count')['year']
         self.popular_name_list = X_copy[X_copy['name_count'] > self.min_count]['name'].unique()
         return self
 
     def transform(self, X):
+        '''
+        Возвращает трансформированный датасет
+        '''
         X_copy = X.copy()
         
         def is_popular(x):
+            '''
+            Проверяет наличие названия автомобиля 
+            в списке категорий. При его отсутствии
+            возвращает other
+            '''
             if x in self.popular_name_list:
                 return x
             else:
@@ -86,6 +120,10 @@ class NameTransformer(BaseEstimator, TransformerMixin):
         return X_copy
 
 def train_and_dump():
+    '''
+    Cобирает пайплайн с предобработкой и обучением модели.
+    Обучает модель и делает дамп в формат .pkl
+    '''
     X_train = df_train.drop('selling_price', axis=1)
     y_train = df_train['selling_price']
     

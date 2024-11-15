@@ -12,6 +12,9 @@ with open('model.pkl', 'rb') as file:
     loaded_model = pickle.load(file)
 
 class Item(BaseModel):
+    '''
+    Данные об автомобиле, выставленного на продажу
+    '''
     name: str
     year: int
     selling_price: int
@@ -27,6 +30,9 @@ class Item(BaseModel):
     seats: float
     
     def to_DataFrame(self) -> pd.DataFrame:
+        '''
+        Возвращает датасет со всеми полями класса
+        '''
         return pd.DataFrame({
             'name': self.name,
             'year': self.year,
@@ -44,17 +50,28 @@ class Item(BaseModel):
         
 
 class Items(BaseModel):
+    '''
+    Автомобили, выставленные на продажу
+    '''
     objects: List[Item]
     
 
 @app.post("/predict_item")
 def predict_item(item: Item) -> float:
+    '''
+    Возвращает ожидаемую стоимость автомобиля
+    в формате float
+    '''
     data = item.to_DataFrame()
     return float(loaded_model.predict(data))
 
 
 @app.post("/predict_items")
 def predict_items(items: List[Item]) -> List[float]:
+    '''
+    Возвращает список ожидаемых стоимостей для
+    автомобилей
+    '''
     res = items[0].to_DataFrame()
     
     for i, item in enumerate(items):

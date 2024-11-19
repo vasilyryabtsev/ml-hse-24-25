@@ -17,7 +17,7 @@
 
 ## Информация о файлах в репозитории
 
-- AI_HW1_Regression_with_inference_base.ipynb - юпитер нотбук с разведовательным анализом данных и обоучением модели
+- AI_HW1_Regression_with_inference_base.ipynb - юпитер нотбук с разведовательным анализом данных и обучением модели
 - main.py - сервер FastAPI
 - model.py - пайплайн для лучшей модели
 - test_report.html, train_report.html - дашборды для обучающей и тестовой выборки

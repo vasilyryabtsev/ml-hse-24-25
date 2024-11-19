@@ -139,7 +139,7 @@ def train_and_dump():
         ('preprocessing', Preprocessing()),
         ('name to popular_name', NameTransformer(20)),
         ('scale + ohe', ct),
-        ('ridge', Ridge())
+        ('ridge', Ridge(alpha=0.1))
     ])
 
     pipe.fit(X_train, y_train)

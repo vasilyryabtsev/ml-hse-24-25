@@ -26,4 +26,4 @@
 
 В папке images представлены скриншоты с демонстрацией работы сервиса.
 
-Запись скринкаста с запуском и проверкой работы сервиса: [гугл диск](https://drive.google.com/file/d/15ReZTCMmyD7rY4vZkHR_R48Cyg5kr4ID/view?usp=sharing)
+Запись скринкаста с запуском и проверкой работы сервиса: [гугл диск](https://drive.google.com/drive/folders/1JubEXZKPBeG7zCjtMKZZR7d3jmaFxnXv?usp=sharing)

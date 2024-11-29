@@ -86,6 +86,11 @@ def predict_items(items: List[Item]) -> List[float]:
 
 @app.post("/predict_csv")
 def predict(file: UploadFile = File(...)) -> FileResponse:
+    '''
+    Принимает объекты в формате csv и делает на их 
+    основе предсказания. Возвращет csv файл с
+    объектами и предсказаниями.
+    '''
     data = pd.read_csv(file.file)
     data['prediction'] = loaded_model.predict(data)
     data.to_csv('data_with_prediction.csv')

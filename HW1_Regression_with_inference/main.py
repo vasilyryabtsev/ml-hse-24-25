@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import List
 import model
@@ -82,3 +83,10 @@ def predict_items(items: List[Item]) -> List[float]:
     res =  res.reset_index(drop=True)
     
     return list(loaded_model.predict(res))
+
+@app.post("/predict_csv")
+def predict(file: UploadFile = File(...)) -> FileResponse:
+    data = pd.read_csv(file.file)
+    data['prediction'] = loaded_model.predict(data)
+    data.to_csv('data_with_prediction.csv')
+    return FileResponse(path='data_with_prediction.csv', filename='data_with_prediction.csv')

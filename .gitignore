@@ -2,4 +2,4 @@ venv/
 catboost_info/
 __pycache__/
 *.pyc
-ДЗ по Uplift обновленное/
+data/
